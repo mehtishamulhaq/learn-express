@@ -9,7 +9,8 @@ const PORT = 3000;
 app
   .route('/class')
   .get((request, response) => {
-    response.send('Retrieve class info');
+    throw new Error();
+    // response.send('Retrieve class info');
   })
   .post((request, response) => {
     response.send('Create class info');
@@ -38,6 +39,15 @@ app
 // serving images
 app.use('/images', express.static('./public/images'));
 
+// using express.json exprress.urlencoded
+// app.use(express.json());
+app.use(express.urlencoded());
+
+// POST express.json and exprress.urlencoded
+app.post('/item', (request, response) => {
+  console.log(request.body);
+  response.send(request.body);
+});
 // GET
 app.get('/', (request, response) => {
   response.json(data);
@@ -87,6 +97,11 @@ app.put('/update', (request, response) => {
 // DELTETE
 app.delete('/delete', (request, response) => {
   response.send('This is a delete request at /delete');
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
 });
 
 app.listen(PORT, () => {
