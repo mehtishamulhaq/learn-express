@@ -5,6 +5,36 @@ const app = express();
 
 const PORT = 3000;
 
+// Route chaining
+app
+  .route('/class')
+  .get((request, response) => {
+    response.send('Retrieve class info');
+  })
+  .post((request, response) => {
+    response.send('Create class info');
+  })
+  .put((request, response) => {
+    response.send('Update class info');
+  });
+
+// // GET
+// app.get('/class', (request, response) => {
+//   response.send('Retrieve class info');
+// });
+
+// // POST
+// app.post('/class', (request, response) => {
+//   response.send('Create class info');
+// });
+
+// // PUT
+// app.post('/class', (request, response) => {
+//   response.send('Update class info');
+// });
+
+// End ---> Route chaining ---->
+
 // serving images
 app.use('/images', express.static('./public/images'));
 
@@ -12,6 +42,28 @@ app.use('/images', express.static('./public/images'));
 app.get('/', (request, response) => {
   response.json(data);
 });
+
+// GET - dowload method
+app.get('/download', (request, response) => {
+  response.download('./public/images/mountains.jpeg');
+});
+
+// GET
+app.get('/redirect', (request, response) => {
+  response.redirect('https://my-portfolio-silk-eta-21.vercel.app/');
+});
+
+// GET with next
+app.get(
+  '/next',
+  (request, response, next) => {
+    console.log('The respose will be sent by the next function');
+    next();
+  },
+  (request, response) => {
+    response.send('Rout with a second callback');
+  },
+);
 
 // GET with routing params
 app.get('/class/:id', (request, response) => {
